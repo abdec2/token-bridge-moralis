@@ -1,9 +1,9 @@
-const serverUrl = "";
-const appId = "";
+const serverUrl = "https://hrxm7nqo75ny.usemoralis.com:2053/server";
+const appId = "62CzL8UjxqNbU5MNT6ZRtCTIddcNcGjZJBLogV5j";
 Moralis.start({ serverUrl, appId }); 
 
-const mainTokenAddress = "";
-const mainBridgeAddress = "";
+const mainTokenAddress = "0x8b4605dD3a27939e86Bb9993547637B534cd65d0";
+const mainBridgeAddress = "0x95c8bc60857d0dc9dF7e33C55Bdd2C140aB291E3";
 
 login();
 

@@ -1,9 +1,9 @@
-const serverUrl = "";
-const appId = "";
+const serverUrl = "https://hrxm7nqo75ny.usemoralis.com:2053/server";
+const appId = "62CzL8UjxqNbU5MNT6ZRtCTIddcNcGjZJBLogV5j";
 Moralis.start({ serverUrl, appId }); 
 
-const childTokenAddress = "";
-const sideBridgeAddress = "";
+const childTokenAddress = "0x9ec58afA14acB6A837479E9Bb22dD136a993Fb61";
+const sideBridgeAddress = "0x7eE257150F966102ab7459df69b6b9D94E82846B";
 
 login();
 
@@ -11,7 +11,7 @@ async function login(){
     Moralis.Web3.enableWeb3().then(async function (){
         renderReturnData();
         subscribeUpdateUnlocked();
-        const chainIdHex = await Moralis.switchNetwork("0x13881"); 
+        const chainIdHex = await Moralis.switchNetwork("0x61"); 
     });
 }
 
