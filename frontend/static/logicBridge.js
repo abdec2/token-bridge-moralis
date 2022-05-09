@@ -1,9 +1,9 @@
-const serverUrl = "https://hrxm7nqo75ny.usemoralis.com:2053/server";
-const appId = "62CzL8UjxqNbU5MNT6ZRtCTIddcNcGjZJBLogV5j";
+const serverUrl = "https://qokkhzbpkvpc.usemoralis.com:2053/server";
+const appId = "AbENEoyCxOQZvK5fyCnLHkjhznvBv6lXWdJwdH7V";
 Moralis.start({ serverUrl, appId }); 
 
-const mainTokenAddress = "0x8b4605dD3a27939e86Bb9993547637B534cd65d0";
-const mainBridgeAddress = "0x95c8bc60857d0dc9dF7e33C55Bdd2C140aB291E3";
+const mainTokenAddress = "0x911d73626B880c2f073CcEEE4bD86575a40c5f81";
+const mainBridgeAddress = "0x371BC1C8963f7a2d9b09DD3e0ce2491d39eb9eF0";
 
 login();
 
@@ -18,7 +18,7 @@ async function login(){
 async function bridge(){
     const amountToBridge = document.getElementById("amountToken").value;
     const options = {type: "erc20", 
-                 amount: Moralis.Units.Token(amountToBridge, "18"), 
+                 amount: Moralis.Units.Token(amountToBridge, "5"), 
                  receiver: mainBridgeAddress,
                  contractAddress: mainTokenAddress}
     let result = await Moralis.transfer(options)
