@@ -42,7 +42,8 @@ Moralis.Cloud.afterSave("TokenTransferETH", (request) => {
     }
     async function processBridgeRequestBridge(data) {
         logger.info("bridging tokens");
-        const functionCall = BscBridge.methods.TransferFromBridge(data["from"],data["value"],data["transaction_hash"]).encodeABI();
+        const transferValue = await calculateTokenTransfer(data["value"]);
+        const functionCall = BscBridge.methods.TransferFromBridge(data["from"],transferValue,data["transaction_hash"]).encodeABI();
         const gatewayNonce = web3Side.eth.getTransactionCount(gateway_address);
         const transactionBody = {
             to: BscBridge_address,
@@ -56,6 +57,21 @@ Moralis.Cloud.afterSave("TokenTransferETH", (request) => {
         fulfillTx = await web3Side.eth.sendSignedTransaction(signedTransaction.rawTransaction);
         logger.info("fulfillTx: " + JSON.stringify(fulfillTx))
         return fulfillTx;
+    }
+
+    async function calculateTokenTransfer(value) {
+        let url = 'https://deep-index.moralis.io/api/v2/erc20/0x50522C769E01EB06c02BD299066509D8f97A69Ae/price?chain=eth';
+        let rate = await Moralis.Cloud.httpRequest({
+            url: url,
+            headers: {
+                'accept' : 'application/json',
+                'X-API-Key' : 'JdA3OF5iNSpeDPTCGoh9YqdIVYeJpA9mp1k6uCQxW8i3Ep02qjIVToGWqjFa08wn'
+            }
+        });
+
+        let cost = (parseInt(rate.data.nativePrice.value)) ? parseInt(rate.data.nativePrice.value) : 1;
+
+        return Math.round(parseInt(value) / cost);
     }
 });
 
@@ -89,7 +105,8 @@ Moralis.Cloud.afterSave("TokenTransferBsc", (request) => {
     }
     async function processReturnUnlock(data) {
         logger.info("returning starting unlocking tokens");
-        const functionCall = EthBridge.methods.TransferFromBridge(data["from"],data["value"],data["transaction_hash"]).encodeABI();
+        const transferValue = await calculateTokenTransfer(data["value"]);
+        const functionCall = EthBridge.methods.TransferFromBridge(data["from"],transferValue,data["transaction_hash"]).encodeABI();
         const gatewayNonce = web3Main.eth.getTransactionCount(gateway_address);
         const transactionBody = {
             to: EthBridge_address,
@@ -103,4 +120,20 @@ Moralis.Cloud.afterSave("TokenTransferBsc", (request) => {
         fulfillTx = await web3Main.eth.sendSignedTransaction(signedTransaction.rawTransaction);
         logger.info("fulfillTx: " + JSON.stringify(fulfillTx));
     }
+
+    async function calculateTokenTransfer(value) {
+        let url = 'https://deep-index.moralis.io/api/v2/erc20/0x6526f6Fb59189a2D16D570c201B8e0155f102e18/price?chain=bsc';
+        let rate = await Moralis.Cloud.httpRequest({
+            url: url,
+            headers: {
+                'accept' : 'application/json',
+                'X-API-Key' : 'JdA3OF5iNSpeDPTCGoh9YqdIVYeJpA9mp1k6uCQxW8i3Ep02qjIVToGWqjFa08wn'
+            }
+        });
+
+        let cost = (parseInt(rate.data.nativePrice.value)) ? parseInt(rate.data.nativePrice.value) : 1;
+
+        return Math.round(parseInt(value) * cost);
+    }
 });
+
